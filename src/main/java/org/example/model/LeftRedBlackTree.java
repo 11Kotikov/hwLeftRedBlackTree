@@ -4,19 +4,19 @@ public class LeftRedBlackTree {
     public Node root;
 
     public void add(int key) {
-        root = addNode(root, key);
+        root = rebalanceNode(root, key);
         root.color = Color.BLACK;
     }
 
-    private Node addNode(Node node, int key) {
+    private Node rebalanceNode(Node node, int key) {
         if (node == null) {
             return new Node(key);
         }
 
         if (key < node.value) {
-            node.leftChild = addNode(node.leftChild, key);
+            node.leftChild = rebalanceNode(node.leftChild, key);
         } else if (key > node.value) {
-            node.rightChild = addNode(node.rightChild, key);
+            node.rightChild = rebalanceNode(node.rightChild, key);
         }
 
         if (node.rightChild != null && node.rightChild.color == Color.RED && (node.leftChild == null || node.leftChild.color == Color.BLACK)) {
@@ -26,7 +26,7 @@ public class LeftRedBlackTree {
             node = rotateRight(node);
         }
         if (node.leftChild != null && node.leftChild.color == Color.RED && node.rightChild != null && node.rightChild.color == Color.RED) {
-            flipColors(node);
+            swapColors(node);
         }
 
         return node;
@@ -50,7 +50,7 @@ public class LeftRedBlackTree {
         return temp;
     }
 
-    private void flipColors(Node node) {
+    private void swapColors(Node node) {
         node.color = (node.color == Color.RED) ? Color.BLACK : Color.RED;
         node.leftChild.color = (node.leftChild.color == Color.RED) ? Color.BLACK : Color.RED;
         node.rightChild.color = (node.rightChild.color == Color.RED) ? Color.BLACK : Color.RED;
